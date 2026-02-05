@@ -148,16 +148,57 @@ let received = amm.swap(token0_address, swap_amount);
 let (amount0, amount1) = amm.remove_liquidity(shares);
 ```
 
-## Deploying This Bad Boy
+## Deployment (Sepolia Testnet)
 
-The constructor wants three things:
-- `token0`: First token address
-- `token1`: Second token address
-- `fee`: Fee in basis points (3 for 0.3% is the classic choice)
+### Prerequisites
+
+- [Starkli](https://github.com/xJonathanLEI/starkli) installed
+- A funded Starknet Sepolia account
+
+### Quick Setup
+
+1. **Set up your account** (if you don't have one):
 
 ```bash
-starkli deploy <class_hash> <token0> <token1> <fee>
+./scripts/setup_account.sh
 ```
+
+2. **Fund your account** with Sepolia ETH from the [faucet](https://starknet-faucet.vercel.app/)
+
+3. **Deploy your account**:
+
+```bash
+starkli account deploy $STARKNET_ACCOUNT --keystore $STARKNET_KEYSTORE
+```
+
+4. **Set environment variables**:
+
+```bash
+export STARKNET_ACCOUNT="$HOME/.starkli-wallets/deployer/account.json"
+export STARKNET_KEYSTORE="$HOME/.starkli-wallets/deployer/keystore.json"
+```
+
+### Deploy Mock Tokens (Optional)
+
+If you need test tokens:
+
+```bash
+./scripts/deploy_mock_tokens.sh
+```
+
+### Deploy the AMM
+
+```bash
+./scripts/deploy.sh <token0_address> <token1_address> [fee]
+```
+
+Example with 0.3% fee:
+
+```bash
+./scripts/deploy.sh 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7 0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d 3
+```
+
+The script will output the deployed contract address and save deployment info to `deployments/`.
 
 ## Things To Keep In Mind
 
